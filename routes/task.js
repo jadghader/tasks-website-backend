@@ -1,9 +1,10 @@
-const express = require('express')
-const router = express.Router()
-const TaskController = require('../controllers/TaskController')
+const express = require("express");
+const router = express.Router();
+const TaskController = require("../controllers/TaskController");
 
-router.get('/', TaskController.index)
-router.post('/add',TaskController.add)
-router.post('/update',TaskController.update)
+router.get("/", TaskController.index);
+router.get("/:id", TaskController.show);
+router.post("/", TaskController.add);
+router.put("/", TaskController.update);
 
-module.exports = router
+module.exports = router;
