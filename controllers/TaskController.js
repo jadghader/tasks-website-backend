@@ -1,58 +1,62 @@
-const Task = require('../models/Task')
-const index = (req,res,next) => {
-    Task.find()
-    .then(response => {
-        res.json ({
-            response
-        })
-    })
-    .catch(error => {
-        res.json({
-            message: "Error while finding"
-        })
-    })
-}
+const Task = require("../models/Task");
 
+const index = async (req, res, next) => {
+  try {
+    const result = await Task.find();
+    res.json({ result: result });
+  } catch (error) {
+    res.json({
+      message: "Error while finding",
+    });
+  }
+};
 
+const show = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const result = await Task.findById(id);
+    res.json({ result: result });
+  } catch (error) {
+    res.json({
+      message: "Error while finding",
+    });
+  }
+};
 
-const add = (req,res,next) => {
-    let task = new Task ({
-        title:req.body.title,
-        status:req.body.status
-    })
-    task.save()
-    .then(response => {
-        res.json({
-            message: "Task was added succesfully to the database"
-        })
-    })
-    .catch(error =>{
-        res.json({
-            message: "Error 404 while adding task"
-        })
-    })
-}
+const add = async (req, res, next) => {
+  try {
+    let task = new Task({
+      title: req.body.title,
+      status: req.body.status,
+    });
+    const result = await task.save();
+    res.json({ result: result, message: "Task ADDED" });
+  } catch (error) {
+    res.json({
+      message: "Error while finding",
+    });
+  }
+};
 
-const update = (req,res,next) => {
-    let taskId = req.body.taskId
+const update = async (req, res, next) => {
+  try {
+    let taskId = req.body.taskId;
     let updatedData = {
-        title:req.body.title,
-        status:req.body.status
-    }
-
-    Task.findByIdAndUpdate(taskId,{$set: updatedData})
-    .then(() => {
-        res.json({
-            message: 'The task was updated succesfully'
-        })
-    })
-    .catch(error => {
-        res.json({
-            message: "Error 404 while updating"
-        })
-    })
-}
+      title: req.body.title,
+      status: req.body.status,
+    };
+    const result = await Task.findByIdAndUpdate(taskId, { $set: updatedData });
+    res.json({ result: result, message: "Task UPDATED" });
+  } catch (error) {
+    res.json({
+      message: "Error while finding",
+    });
+  }
+};
 
 module.exports = {
-    index,add,update
-}
+  index,
+  show,
+  add,
+  update,
+};
