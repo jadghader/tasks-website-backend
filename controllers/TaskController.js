@@ -11,18 +11,6 @@ const index = async (req, res, next) => {
   }
 };
 
-const show = async (req, res, next) => {
-  try {
-    const id = req.params.id;
-    const result = await Task.findById(id);
-    res.json({ result: result });
-  } catch (error) {
-    res.json({
-      message: "Error while finding",
-    });
-  }
-};
-
 const add = async (req, res, next) => {
   try {
     let task = new Task({
@@ -40,13 +28,25 @@ const add = async (req, res, next) => {
 
 const update = async (req, res, next) => {
   try {
-    let taskId = req.body.taskId;
+    const taskId = req.params.id;
     let updatedData = {
       title: req.body.title,
       status: req.body.status,
     };
     const result = await Task.findByIdAndUpdate(taskId, { $set: updatedData });
-    res.json({ result: result, message: "Task UPDATED" });
+    res.json({ message: "Task UPDATED" });
+  } catch (error) {
+    res.json({
+      message: "Error while finding",
+    });
+  }
+};
+
+const del = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const result = await Task.findByIdAndDelete(id);
+    res.json({ message: "Deleted succesfully" });
   } catch (error) {
     res.json({
       message: "Error while finding",
@@ -56,7 +56,7 @@ const update = async (req, res, next) => {
 
 module.exports = {
   index,
-  show,
   add,
   update,
+  del,
 };
